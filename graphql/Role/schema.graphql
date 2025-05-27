@@ -1,0 +1,47 @@
+scalar DateTime
+
+type Role {
+    role_id: ID!
+    role_name: String
+    code: String
+    description: String
+    created_at: DateTime!
+    updated_at: DateTime 
+}
+
+input RoleInput {
+    role_name: String
+    code: String
+    description: String
+}
+
+input RoleCreateInput {
+    role_name: String
+    code: String
+    description: String
+}
+
+input RoleFilter {
+    role_id: ID
+    role_name: String
+    search: String @where(operator: "LIKE")
+}
+
+extend type Query {
+    roles(search: String): [Role!]!
+        @all(model: "App\\Models\\Role\\Role")
+
+    role(role_id: ID! @eq): Role
+        @find(model: "App\\Models\\Role\\Role")
+}
+
+extend type Mutation {
+    createRole(input: RoleCreateInput! @spread): Role!
+        @create(model: "App\\Models\\Role\\Role")
+
+    updateRole(role_id: ID! @eq, input: RoleInput! @spread): Role!
+        @update(model: "App\\Models\\Role\\Role")
+
+    deleteRole(role_id: ID! @eq): Role
+        @delete(model: "App\\Models\\Role\\Role")
+}

@@ -1,0 +1,60 @@
+scalar DateTime
+
+type Service {
+    service_id: ID!
+    service_name: String
+    service_type_id: ID
+    price: Float
+    estimated_duration: Int
+    description: String
+    is_active: Boolean
+    outlet_id: ID
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input ServiceInput {
+    service_name: String
+    service_type_id: ID
+    price: Float
+    estimated_duration: Int
+    description: String
+    is_active: Boolean
+    outlet_id: ID
+}
+
+input ServiceCreateInput {
+    service_name: String
+    service_type_id: ID
+    price: Float
+    estimated_duration: Int
+    description: String
+    is_active: Boolean
+    outlet_id: ID
+}
+
+input ServiceFilter {
+    service_id: ID
+    service_name: String
+    is_active: Boolean
+    search: String @where(operator: "LIKE")
+}
+
+extend type Query {
+    services(search: String): [Service!]!
+        @all(model: "App\\Models\\Service\\Service")
+
+    service(service_id: ID! @eq): Service
+        @find(model: "App\\Models\\Service\\Service")
+}
+
+extend type Mutation {
+    createService(input: ServiceCreateInput! @spread): Service!
+        @create(model: "App\\Models\\Service\\Service")
+
+    updateService(service_id: ID! @eq, input: ServiceInput! @spread): Service!
+        @update(model: "App\\Models\\Service\\Service")
+
+    deleteService(service_id: ID! @eq): Service
+        @delete(model: "App\\Models\\Service\\Service")
+}

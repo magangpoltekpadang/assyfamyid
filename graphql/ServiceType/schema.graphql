@@ -1,0 +1,45 @@
+scalar DateTime
+
+type ServiceType {
+    service_type_id: ID!
+    type_name: String!
+    code: String!
+    description: String
+    is_active: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input ServiceTypeCreateInput {
+    type_name: String!
+    code: String!
+    description: String
+    is_active: Boolean = true
+}
+
+input ServiceTypeUpdateInput {
+    type_name: String
+    code: String
+    description: String
+    is_active: Boolean
+}
+
+extend type Query {
+    serviceTypes: [ServiceType!]! @all(model: "App\\Models\\ServiceType\\ServiceType")
+
+    serviceType(service_type_id: ID! @eq(key: "service_type_id")): ServiceType
+    @find(model: "App\\Models\\ServiceType\\ServiceTypee")
+}
+
+extend type Mutation {
+    createServiceType(input: ServiceTypeCreateInput! @spread): ServiceType!
+        @create(model: "App\\Models\\ServiceType\\ServiceType")
+
+    updateServiceType(
+        service_type_id: ID! @eq(key: "service_type_id"),
+        input: ServiceTypeUpdateInput! @spread
+    ): ServiceType! @update(model: "App\\Models\\ServiceType\\ServiceType")
+
+    deleteServiceType(service_type_id: ID! @eq(key: "service_type_id")): ServiceType
+        @delete(model: "App\\Models\\ServiceType\\ServiceType")
+}

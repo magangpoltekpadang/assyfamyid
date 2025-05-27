@@ -1,0 +1,52 @@
+scalar DateTime
+
+type TransactionPayment {
+    payment_id: ID!
+    transaction_id: ID
+    payment_method_id: ID
+    status_id: ID
+    amount: Float
+    payment_date: DateTime
+    reference_number: String
+    notes: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+input TransactionPaymentInput {
+    transaction_id: ID
+    payment_method_id: ID
+    amount: Float
+    payment_date: DateTime
+    reference_number: String
+    status_id: ID
+    notes: String
+    updated_at: DateTime
+}
+
+input TransactionPaymentUpdateInput {
+  transaction_id: ID
+  payment_method_id: ID
+  amount: Float
+  payment_date: DateTime
+  reference_number: String
+  status_id: ID
+  notes: String
+}
+
+extend type Query {
+    transactionPayments: [TransactionPayment!]! @all(model: "App\\Models\\TransactionPayment\\TransactionPayment")
+    transactionPayment(transaction_payment_id: ID! @eq): TransactionPayment
+        @find(model: "App\\Models\\TransactionPayment\\TransactionPayment")
+}
+
+extend type Mutation {
+    createTransactionPayment(input: TransactionPaymentInput! @spread): TransactionPayment!
+        @create(model: "App\\Models\\TransactionPayment\\TransactionPayment")
+
+    updateTransactionPayment( payment_id: ID! @eq input: TransactionPaymentUpdateInput! @spread): TransactionPayment!
+        @update(model: "App\\Models\\TransactionPayment\\TransactionPayment")
+
+    deleteTransactionPayment(payment_id: ID! @eq): TransactionPayment
+        @delete(model: "App\\Models\\TransactionPayment\\TransactionPayment")
+}

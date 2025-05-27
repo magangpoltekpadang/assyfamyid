@@ -1,0 +1,61 @@
+type TransactionService {
+    transaction_service_id: ID!
+    transaction_id: ID!
+    service_id: ID!
+    quantity: Int!
+    unit_price: Float
+    discount: Float
+    total_price: Float
+    worker_id: ID
+    start_time: DateTime
+    end_time: DateTime
+    status: String
+    notes: String
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input TransactionServiceInput {
+    transaction_id: ID!
+    service_id: ID!
+    quantity: Int!
+    unit_price: Float
+    discount: Float
+    total_price: Float
+    worker_id: ID
+    start_time: DateTime
+    end_time: DateTime
+    status: String
+    notes: String
+}
+
+input TransactionServiceUpdateInput {
+    transaction_id: ID
+    service_id: ID
+    quantity: Int
+    unit_price: Float
+    discount: Float
+    total_price: Float
+    worker_id: ID
+    start_time: DateTime
+    end_time: DateTime
+    status: String
+    notes: String
+}
+
+extend type Query {
+    transactionServices: [TransactionService!]! @all(model: "App\\Models\\TransactionService\\TransactionService")
+    transactionService(transaction_service_id: ID! @eq): TransactionService
+        @find(model: "App\\Models\\TransactionService\\TransactionService")
+}
+
+extend type Mutation {
+    createTransactionService(input: TransactionServiceInput! @spread): TransactionService!
+        @create(model: "App\\Models\\TransactionService\\TransactionService")
+
+    updateTransactionService(transaction_service_id: ID! @eq, input: TransactionServiceUpdateInput! @spread): TransactionService!
+        @update(model: "App\\Models\\TransactionService\\TransactionService")
+
+    deleteTransactionService(transaction_service_id: ID! @eq): TransactionService
+        @delete(model: "App\\Models\\TransactionService\\TransactionService")
+}

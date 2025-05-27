@@ -1,0 +1,60 @@
+type  VehicleType {
+    vehicle_type_id: ID!
+    type_name: String!
+    code: String!
+    description: String
+    is_active: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input VehicleTypeInput {
+    type_name: String!
+    code: String!
+    description: String
+    is_active: Boolean = true
+}
+
+input  VehicleTypeCreateInput {
+    type_name: String!
+    code: String!
+    description: String
+    is_active: Boolean = true
+}
+
+input  VehicleTypeFilter{
+    id:ID
+    code: String
+    is_active: Boolean
+    search: String @where(operator: "like")
+}
+
+extend type Query{
+     vehicleTypes(
+        page: Int,
+        perPage: Int,
+        search: String
+        is_active: Boolean
+    ): [ VehicleType!]! @all(model: "App\\Models\\VehicleTyp\\VehicleType")
+
+    vehicleType(vehicle_type_id: ID! @eq(key: "vehicle_type_id")):  VehicleType
+    @find(model: "App\\Models\\VehicleTyp\\VehicleType")
+}
+
+extend type Mutation {
+    createVehicleType(input:  VehicleTypeCreateInput! @spread):  VehicleType!
+        @create(model: "App\\Models\\VehicleTyp\\VehicleType")
+
+    updateVehicleType(
+        vehicle_type_id: ID! @eq(key: "vehicle_type_id"),
+        input: VehicleTypeInput! @spread):
+         VehicleType! @update(model: "App\\Models\\VehicleTyp\\VehicleType")
+
+    deleteVehicleType(vehicle_type_id: ID! @eq(key: "vehicle_type_id")):  VehicleType
+        @delete(model: "App\\Models\\VehicleTyp\\VehicleType")
+}
+
+type  VehicleTypePaginator{
+    data: [ VehicleType]!
+    paginatorInfo : PaginatorInfo!
+}

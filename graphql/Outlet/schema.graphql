@@ -1,0 +1,29 @@
+scalar DateTime
+type Outlet {
+    outlet_id: ID!
+    outlet_name: String!
+    address: String
+    phone_number: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input OutletInput {
+    outlet_name: String!
+    address: String
+    phone_number: String
+}
+
+extend type Query {
+    outlets: [Outlet!]! @all(model: "App\\Models\\Outlet\\Outlet")
+    outlet(outlet_id: ID! @eq): Outlet @find(model: "App\\Models\\Outlet\\Outlet")
+}
+
+extend type Mutation {
+    createOutlet(input: OutletInput! @spread): Outlet!
+        @create(model: "App\\Models\\Outlet\\Outlet")
+    updateOutlet(outlet_id: ID! @eq, input: OutletInput! @spread): Outlet!
+        @update(model: "App\\Models\\Outlet\\Outlet")
+    deleteOutlet(outlet_id: ID! @eq): Outlet
+        @delete(model: "App\\Models\\Outlet\\Outlet")
+}

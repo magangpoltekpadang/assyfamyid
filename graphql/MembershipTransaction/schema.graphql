@@ -1,0 +1,67 @@
+scalar Date
+scalar DateTime
+
+type MemberTransaction {
+    member_transaction_id: ID!
+    customer_id: Int
+    package_id: Int
+    outlet_id: Int
+    staff_id: Int
+    transaction_date: DateTime!
+    expiry_date: DateTime!
+    price: Float
+    payment_method_id: Int
+    receipt_number: String
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input MemberTransactionInput {
+    customer_id: Int
+    package_id: Int
+    outlet_id: Int
+    staff_id: Int
+    transaction_date: DateTime!
+    expiry_date: DateTime!
+    price: Float
+    payment_method_id: Int
+    receipt_number: String
+}
+
+input MemberTransactionCreateInput {
+    customer_id: Int
+    package_id: Int
+    outlet_id: Int
+    staff_id: Int
+    transaction_date: DateTime!
+    expiry_date: DateTime!
+    price: Float
+    payment_method_id: Int
+    receipt_number: String
+}
+
+extend type Query {
+    memberTransactions(search: String): [MemberTransaction!]!
+        @all(model: "App\\Models\\MembershipTransaction\\MembershipTransaction")
+
+    memberTransaction(member_transaction_id: ID! @eq): MemberTransaction
+        @find(model: "App\\Models\\MembershipTransaction\\MembershipTransaction")
+}
+
+extend type Mutation {
+    createMemberTransaction(input: MemberTransactionCreateInput! @spread): MemberTransaction!
+        @create(model: "App\\Models\\MembershipTransaction\\MembershipTransaction")
+
+    updateMemberTransaction(
+        member_transaction_id: ID! @eq,
+        input: MemberTransactionInput! @spread
+    ): MemberTransaction! @update(model: "App\\Models\\MembershipTransaction\\MembershipTransaction")
+
+    deleteMemberTransaction(member_transaction_id: ID! @eq): MemberTransaction
+        @delete(model: "App\\Models\\MembershipTransaction\\MembershipTransaction")
+}
+
+type MemberTransactionPaginator {
+    data: [MemberTransaction]!
+    paginatorInfo: PaginatorInfo!
+}

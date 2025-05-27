@@ -1,0 +1,51 @@
+scalar DateTime
+
+type NotificationStatus {
+    status_id: ID!
+    status_name: String
+    code: String
+    description: String
+    created_at: DateTime!
+}
+
+input NotificationStatusInput {
+    status_name: String
+    code: String
+    description: String
+}
+
+input NotificationStatusCreateInput {
+    status_name: String
+    code: String
+    description: String
+}
+
+input NotificationStatusFilter {
+    status_id: ID
+    code: String
+    search: String @where(operator: "LIKE")
+}
+
+extend type Query {
+    notificationStatuses(search: String): [NotificationStatus!]!
+        @all(model: "App\\Models\\NotificationStatus\\NotificationStatus")
+
+    notificationStatus(status_id: ID! @eq): NotificationStatus
+        @find(model: "App\\Models\\NotificationStatus\\NotificationStatus")
+}
+
+extend type Mutation {
+    createNotificationStatus(input: NotificationStatusCreateInput! @spread): NotificationStatus!
+        @create(model: "App\\Models\\NotificationStatus\\NotificationStatus")
+
+    updateNotificationStatus(status_id: ID! @eq, input: NotificationStatusInput! @spread): NotificationStatus!
+        @update(model: "App\\Models\\NotificationStatus\\NotificationStatus")
+
+    deleteNotificationStatus(status_id: ID! @eq): NotificationStatus
+        @delete(model: "App\\Models\\NotificationStatus\\NotificationStatus")
+}
+
+type NotificationStatusPaginator {
+    data: [NotificationStatus]!
+    paginatorInfo: PaginatorInfo!
+}

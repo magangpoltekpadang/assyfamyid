@@ -1,0 +1,75 @@
+scalar DateTime
+
+type Transaction {
+    transaction_id: ID!
+    transaction_code: String
+    customer_id: ID!
+    outlet_id: ID!
+    staff_id: ID!
+    transaction_date: DateTime!
+    subtotal: Float
+    discount: Float
+    tax: Float
+    final_price: Float
+    payment_status_id: ID!
+    gate_opened: Boolean
+    shift_id: ID!
+    receipt_printed: Boolean
+    whatsapp_sent: Boolean
+    notes: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input TransactionInput {
+    transaction_code: String
+    customer_id: ID!
+    outlet_id: ID!
+    staff_id: ID!
+    transaction_date: DateTime!
+    subtotal: Float
+    discount: Float
+    tax: Float
+    final_price: Float
+    payment_status_id: ID!
+    gate_opened: Boolean
+    shift_id: ID!
+    receipt_printed: Boolean
+    whatsapp_sent: Boolean
+    notes: String
+}
+
+input TransactionUpdateInput {
+    transaction_code: String
+    customer_id: ID
+    outlet_id: ID
+    staff_id: ID
+    transaction_date: DateTime
+    subtotal: Float
+    discount: Float
+    tax: Float
+    final_price: Float
+    payment_status_id: ID
+    gate_opened: Boolean
+    shift_id: ID
+    receipt_printed: Boolean
+    whatsapp_sent: Boolean
+    notes: String
+}
+
+extend type Query {
+    transactions: [Transaction!]! @all(model: "App\\Models\\Transaction\\Transaction")
+    transaction(transaction_id: ID! @eq): Transaction
+        @find(model: "App\\Models\\Transaction\\Transaction")
+}
+
+extend type Mutation {
+    createTransaction(input: TransactionInput! @spread): Transaction!
+        @create(model: "App\\Models\\Transaction\\Transaction")
+
+    updateTransaction(transaction_id: ID! @eq, input: TransactionUpdateInput! @spread): Transaction!
+        @update(model: "App\\Models\\Transaction\\Transaction")
+
+    deleteTransaction(transaction_id: ID! @eq): Transaction
+        @delete(model: "App\\Models\\Transaction\\Transaction")
+}

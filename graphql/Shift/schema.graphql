@@ -1,0 +1,42 @@
+scalar Date
+scalar DateTime
+
+type Shift {
+    shift_id: ID!
+    outlet_id: ID!
+    shift_name: String!
+    start_time: DateTime!
+    end_time: DateTime!
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input ShiftInput {
+    outlet_id: ID!
+    shift_name: String!
+    start_time: DateTime!
+    end_time: DateTime!
+}
+
+input ShiftUpdateInput {
+    shift_name: String
+    outlet_id: ID
+    start_time: DateTime!
+    end_time: DateTime!
+}
+
+extend type Query {
+    shifts: [Shift!]! @all(model: "App\\Models\\Shift\\Shift")
+    shift(shift_id: ID! @eq): Shift @find(model: "App\\Models\\Shift\\Shift")
+}
+
+extend type Mutation {
+    createShift(input: ShiftInput! @spread): Shift!
+        @create(model: "App\\Models\\Shift\\Shift")
+
+    updateShift(shift_id: ID! @eq, input: ShiftUpdateInput! @spread): Shift!
+        @update(model: "App\\Models\\Shift\\Shift")
+
+    deleteShift(shift_id: ID! @eq): Shift
+        @delete(model: "App\\Models\\Shift\\Shift")
+}

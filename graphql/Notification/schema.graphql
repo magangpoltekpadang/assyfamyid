@@ -1,0 +1,54 @@
+scalar DateTime
+
+type Notification {
+    notification_id: ID!
+    customer_id: Int
+    notification_type_id: Int
+    message: String
+    sent_at: DateTime
+    status_id: Int
+    retry_count: Int
+    created_at: DateTime!
+}
+
+input NotificationCreateInput {
+    customer_id: Int
+    notification_type_id: Int
+    message: String
+    sent_at: DateTime
+    status_id: Int
+    retry_count: Int
+}
+
+input NotificationFilter {
+    notification_id: ID
+    user_id: Int
+    is_read: Boolean
+    search: String @where(operator: "LIKE")
+}
+
+extend type Query {
+    notifications(search: String): [Notification!]!
+        @all(model: "App\\Models\\Notification\\Notification")
+
+    notification(notification_id: ID! @eq): Notification
+        @find(model: "App\\Models\\Notification\\Notification")
+}
+
+extend type Mutation {
+    createNotification(input: NotificationCreateInput! @spread): Notification!
+        @create(model: "App\\Models\\Notification\\Notification")
+
+    updateNotification(
+        notification_id: ID! @eq,
+        input: NotificationInput! @spread
+    ): Notification! @update(model: "App\\Models\\Notification\\Notification")
+
+    deleteNotification(notification_id: ID! @eq): Notification
+        @delete(model: "App\\Models\\Notification\\Notification")
+}
+
+type NotificationPaginator {
+    data: [Notification]!
+    paginatorInfo: PaginatorInfo!
+}

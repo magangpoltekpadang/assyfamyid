@@ -1,0 +1,48 @@
+scalar DateTime
+
+type Staff {
+    staff_id: ID!
+    name: String!
+    email: String
+    phone_number: String
+    role_id: ID!
+    password_hash: String!
+    is_active: Boolean
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input StaffInput {
+    name: String!
+    email: String
+    phone_number: String
+    role_id: ID!
+    password_hash: String!
+    is_active: Boolean = true
+}
+
+input StaffUpdateInput {
+    staff_id: ID!
+    name: String
+    email: String
+    phone_number: String
+    role_id: ID
+    password_hash: String
+    is_active: Boolean
+}
+
+extend type Query {
+    staffs: [Staff!]! @all(model: "App\\Models\\Staff\\Staff")
+    staff(staff_id: ID! @eq): Staff @find(model: "App\\Models\\Staff\\Staff")
+}
+
+extend type Mutation {
+    createStaff(input: StaffInput! @spread): Staff!
+        @create(model: "App\\Models\\Staff\\Staff")
+
+    updateStaff(staff_id: ID! @eq, input: StaffUpdateInput! @spread): Staff!
+        @update(model: "App\\Models\\Staff\\Staff")
+
+    deleteStaff(staff_id: ID! @eq): Staff
+        @delete(model: "App\\Models\\Staff\\Staff")
+}

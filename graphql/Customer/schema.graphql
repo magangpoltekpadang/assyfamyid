@@ -1,0 +1,94 @@
+scalar DateTime
+scalar Date
+
+type Customer{
+    customer_id: ID!
+    plate_number: String!
+    name: String!
+    phone_number: String!
+    vehicle_type_id: ID!
+    vehicle_color: String
+    member_number: String
+    join_date: DateTime!
+    member_expiry_date: DateTime!
+    is_member: Boolean!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    vehicle_type: VehicleType @belongsTo
+
+}
+
+input CustomerInput {
+    plate_number: String!
+    name: String!
+    phone_number: String!
+    vehicle_type_id: ID!
+    vehicle_color: String
+    member_number: String
+    join_date: DateTime!
+    member_expiry_date: DateTime!
+    is_member: Boolean = false
+}
+
+input CustomerCreateInput {
+    plate_number: String!
+    name: String!
+    phone_number: String!
+    vehicle_type_id: ID!
+    vehicle_color: String
+    member_number: String
+    join_date: DateTime!
+    member_expiry_date: DateTime!
+    is_member: Boolean = false
+}
+
+input CustomerFilter {
+    customer_id: ID
+    plate_number: String
+    name: String
+    phone_number: String
+    vehicle_type_id: ID
+    is_member: Boolean
+    search: String @where(operator: "like")
+}
+
+extend type Query {
+    customers(
+        search: String
+        is_member: Boolean
+    ): [Customer!]! @all(model: "App\\Models\\Customer\\Customer")
+
+    customer(customer_id: ID! @eq(key: "customer_id")): Customer
+        @find(model: "App\\Models\\Customer\\Customer")
+}
+
+# extend type Query {
+#   customers(
+#     where: CustomerFilter
+#     orderBy: [OrderByClause!]
+#   ): CustomerPaginator
+#     @paginate(type: PAGINATOR, model: "App\\Models\\Customer\\Customer")
+
+#   customer(customer_id: ID! @eq): Customer
+#     @find(model: "App\\Models\\Customer\\Customer")
+# }
+
+extend type Mutation {
+    createCustomer(input: CustomerCreateInput! @spread): Customer!
+        @create(model: "App\\Models\\Customer\\Customer")
+
+    updateCustomer(
+        customer_id: ID! @eq(key: "customer_id"),
+        input: CustomerInput! @spread
+    ): Customer! @update(model: "App\\Models\\Customer\\Customer")
+
+    deleteCustomer(customer_id: ID! @eq(key: "customer_id")): Customer
+        @delete(model: "App\\Models\\Customer\\Customer")
+}
+
+type CustomerPaginator {
+    data: [Customer]!
+    paginatorInfo: PaginatorInfo!
+}
+

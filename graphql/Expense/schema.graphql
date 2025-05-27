@@ -1,0 +1,68 @@
+scalar Date
+scalar DateTime
+
+type Expense {
+    expense_id: ID!
+    expense_code: String
+    outlet_id: Int
+    expense_date: DateTime
+    amount: Float
+    category: String
+    description: String
+    staff_id: Int
+    shift_id: Int
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input ExpenseInput {
+    expense_code: String
+    outlet_id: Int
+    expense_date: DateTime
+    amount: Float
+    category: String
+    description: String
+    staff_id: Int
+    shift_id: Int
+}
+
+input ExpenseCreateInput {
+    expense_code: String
+    outlet_id: Int
+    expense_date: DateTime!
+    amount: Float
+    category: String
+    description: String
+    staff_id: Int
+    shift_id: Int
+}
+
+input ExpenseFilter {
+    expense_id: ID
+    category: String
+    search: String @where(operator: "LIKE")
+}
+
+extend type Query {
+    expenses(search: String): [Expense!]!
+        @all(model: "App\\Models\\Expense\\Expense")
+
+    expense(expense_id: ID! @eq): Expense
+        @find(model: "App\\Models\\Expense\\Expense")
+}
+
+extend type Mutation {
+    createExpense(input: ExpenseCreateInput! @spread): Expense!
+        @create(model: "App\\Models\\Expense\\Expense")
+
+    updateExpense(expense_id: ID! @eq, input: ExpenseInput! @spread): Expense!
+        @update(model: "App\\Models\\Expense\\Expense")
+
+    deleteExpense(expense_id: ID! @eq): Expense
+        @delete(model: "App\\Models\\Expense\\Expense")
+}
+
+type ExpensePaginator {
+    data: [Expense]!
+    paginatorInfo: PaginatorInfo!
+}

@@ -1,0 +1,47 @@
+scalar DateTime
+
+type PaymentStatus {
+    payment_status_id: ID!
+    status_name: String
+    code: String
+    description: String
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+input PaymentStatusInput {
+    status_name: String
+    code: String
+    description: String
+}
+
+input PaymentStatusCreateInput {
+    status_name: String
+    code: String
+    description: String
+}
+
+input PaymentStatusFilter {
+    payment_status_id: ID
+    code: String
+    search: String @where(operator: "LIKE")
+}
+
+extend type Query {
+    paymentStatuses(search: String): [PaymentStatus!]!
+        @all(model: "App\\Models\\PaymentStatus\\PaymentStatus")
+
+    paymentStatus(payment_status_id: ID! @eq): PaymentStatus
+        @find(model: "App\\Models\\PaymentStatus\\PaymentStatus")
+}
+
+extend type Mutation {
+    createPaymentStatus(input: PaymentStatusCreateInput! @spread): PaymentStatus!
+        @create(model: "App\\Models\\PaymentStatus\\PaymentStatus")
+
+    updatePaymentStatus(payment_status_id: ID! @eq, input: PaymentStatusInput! @spread): PaymentStatus!
+        @update(model: "App\\Models\\PaymentStatus\\PaymentStatus")
+
+    deletePaymentStatus(payment_status_id: ID! @eq): PaymentStatus
+        @delete(model: "App\\Models\\PaymentStatus\\PaymentStatus")
+}
