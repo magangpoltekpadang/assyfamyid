@@ -31,7 +31,7 @@ input NotificationTypeFilter {
 }
 
 extend type Query {
-    notificationTypes(search: String): [NotificationType!]!
+    notificationTypes: [NotificationType!]! 
         @all(model: "App\\Models\\NotificationType\\NotificationType")
 
     notificationType(notification_type_id: ID! @eq): NotificationType

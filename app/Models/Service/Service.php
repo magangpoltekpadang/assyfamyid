@@ -33,11 +33,11 @@ class Service extends Model
 
     public function type()
     {
-        return $this->belongsTo(\App\Models\ServiceType\ServiceType::class, 'service_type_id');
+        return $this->belongsTo(\App\Models\ServiceType\ServiceType::class, 'service_type_id', 'service_type_id');
     }
 
     public function outlet()
     {
-        return $this->belongsTo(\App\Models\Outlet\Outlet::class);
+        return $this->belongsTo(\App\Models\Outlet\Outlet::class, 'outlet_id', 'outlet_id');
     }
 }

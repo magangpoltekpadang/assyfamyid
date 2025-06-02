@@ -14,19 +14,19 @@ class Shift extends Model
     protected $primaryKey = 'shift_id';
     public $timestamps = true;
 
-    protected $fillable = ['shift_name', 'start_time', 'end_time', 'is_active'];
+    protected $fillable = ['shift_name', 'start_time', 'end_time', 'is_active', 'outlet_id'];
 
     protected $casts = [
         'is_active' => 'boolean',
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
     public function outlet()
     {
-        return $this->belongsTo(\App\Models\Outlet\Outlet::class);
+        return $this->belongsTo(\App\Models\Outlet\Outlet::class, 'outlet_id', 'outlet_id');
     }
 
 }

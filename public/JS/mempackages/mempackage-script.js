@@ -13,20 +13,7 @@ function membershipPackageData() {
     search: '',
     isActiveFilter: '',
     showDeleteModal: false,
-    packageToDelete: null,
-
-    // computed properties mirip serviceTypeData style
-    get totalPackages() {
-      return this.packages.length;
-    },
-
-    get activePackages() {
-      return this.packages.filter(p => p.is_active === 1).length;
-    },
-
-    get inactivePackages() {
-      return this.packages.filter(p => p.is_active === 0).length;
-    },
+    packageIdToDelete: null,
 
     init() {
       this.fetchPackages();
@@ -61,13 +48,11 @@ function membershipPackageData() {
 
         let allPackages = result.data.membershipPackages || [];
 
-        // Filter berdasarkan isActiveFilter jika ada
         if (this.isActiveFilter !== '') {
-          const isActiveBool = this.isActiveFilter === '1';
-          allPackages = allPackages.filter(p => p.is_active === isActiveBool);
+          const isActiveNum = parseInt(this.isActiveFilter);
+          allPackages = allPackages.filter(p => p.is_active === isActiveNum);
         }
 
-        // Filter search berdasarkan package_name (case insensitive)
         if (this.search) {
           const lowerSearch = this.search.toLowerCase();
           allPackages = allPackages.filter(p =>
@@ -75,7 +60,6 @@ function membershipPackageData() {
           );
         }
 
-        // Manual pagination
         const start = (this.pagination.current_page - 1) * this.pagination.per_page;
         const end = start + this.pagination.per_page;
         this.packages = allPackages.slice(start, end);
@@ -116,23 +100,24 @@ function membershipPackageData() {
       await this.fetchPackages();
     },
 
-    confirmDelete(packageId) {
-      this.packageToDelete = packageId;
+    confirmDelete(id) {
+      this.packageIdToDelete = id;
       this.showDeleteModal = true;
     },
 
     async deletePackage() {
       try {
         const mutation = `
-          mutation($id: ID!) {
-            deleteMembershipPackage(id: $id) {
-              status
-              message
+          mutation($package_id: ID!) {
+            deleteMembershipPackage(package_id: $package_id) {
+              package_id
             }
           }
         `;
 
-        const variables = { id: this.packageToDelete };
+        const variables = {
+          package_id: this.packageIdToDelete,
+        };
 
         const response = await fetch('/graphql', {
           method: 'POST',
@@ -142,16 +127,15 @@ function membershipPackageData() {
 
         const result = await response.json();
 
-        if (result.errors || result.data.deleteMembershipPackage.status !== 'success') {
-          console.error('Failed to delete package:', result.errors || result.data.deleteMembershipPackage.message);
-          return;
+        if (result.data?.deleteMembershipPackage?.package_id) {
+          this.showDeleteModal = false;
+          this.packageIdToDelete = null;
+          await this.fetchPackages();
+        } else {
+          console.error('Failed to delete membership package.');
         }
-
-        this.showDeleteModal = false;
-        this.packageToDelete = null;
-        await this.fetchPackages();
       } catch (error) {
-        console.error('Error deleting package:', error);
+        console.error('Error deleting membership package:', error);
       }
     },
   };

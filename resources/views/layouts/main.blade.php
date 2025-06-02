@@ -34,12 +34,52 @@
                 <i class="fas fa-user-circle mr-2"></i> Customers
             </a>
 
+            <a href="/membership-packages" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-box-open mr-2"></i> Membership Package
+            </a>
+
+            <a href="/notification-statuses" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-bell mr-2"></i> Notification Status
+            </a>
+
+            <a href="/notification-types" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-bell mr-2"></i> Notification Types
+            </a>
+
+            <a href="/outlets" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-store mr-2"></i> Outlet
+            </a>
+
+            <a href="/payment-methods" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-money-check mr-2"></i> Payment Method
+            </a>
+
+            <a href="/payment-statuses" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-money-check mr-2"></i> Payment Status
+            </a>
+
+            <a href="/roles" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-user-shield mr-2"></i> Role
+            </a>
+
+            <a href="/services" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-tools mr-2"></i> Service
+            </a>
+
             <a href="/service-types" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
                 <i class="fas fa-tools mr-2"></i> Service Types
             </a>
 
-            <a href="/membership-packages" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
-                <i class="fas fa-box-open mr-2"></i> Membership Package
+            <a href="/shift" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-clock mr-2"></i> Shift
+            </a>
+
+            <a href="/staff" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-users mr-2"></i> Staff
+            </a>
+
+            <a href="/transaction" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-receipt mr-2"></i> Transaction
             </a>
 
             <a href="/vehicle-types" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">

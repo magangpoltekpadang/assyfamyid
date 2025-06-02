@@ -19,6 +19,8 @@ type Transaction {
     notes: String
     created_at: DateTime!
     updated_at: DateTime!
+    payment_status: PaymentStatus @belongsTo
+    customer: Customer @belongsTo
 }
 
 input TransactionInput {

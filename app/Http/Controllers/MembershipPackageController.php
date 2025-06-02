@@ -37,13 +37,13 @@ class MembershipPackageController extends Controller
     public function show($id)
     {
         $package = MembershipPackage::findOrFail($id);
-        return view('membership-packages.show-membership-packages', compact('package'));
+        return view('mempackages.show-mempackages', compact('package'));
     }
 
     public function edit($id)
     {
         $package = MembershipPackage::findOrFail($id);
-        return view('membership-packages.edit-membership-packages', compact('package'));
+        return view('mempackages.edit-mempackages', compact('package'));
     }
 
     public function update(Request $request, $id)

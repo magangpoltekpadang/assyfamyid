@@ -6,10 +6,14 @@ type Staff {
     email: String
     phone_number: String
     role_id: ID!
+    outlet_id: ID
     password_hash: String!
     is_active: Boolean
+    last_login: DateTime
     created_at: DateTime!
     updated_at: DateTime
+    outlet: Outlet @belongsTo
+    role: Role @belongsTo
 }
 
 input StaffInput {
@@ -17,6 +21,7 @@ input StaffInput {
     email: String
     phone_number: String
     role_id: ID!
+    outlet_id: ID
     password_hash: String!
     is_active: Boolean = true
 }
@@ -27,6 +32,7 @@ input StaffUpdateInput {
     email: String
     phone_number: String
     role_id: ID
+    outlet_id: ID
     password_hash: String
     is_active: Boolean
 }

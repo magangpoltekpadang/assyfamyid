@@ -4,6 +4,9 @@ type Outlet {
     outlet_name: String!
     address: String
     phone_number: String
+    latitude: Float
+    longitude: Float
+    is_active: Boolean
     created_at: DateTime!
     updated_at: DateTime!
 }
@@ -12,6 +15,9 @@ input OutletInput {
     outlet_name: String!
     address: String
     phone_number: String
+    latitude: Float
+    longitude: Float
+    is_active: Boolean
 }
 
 extend type Query {

@@ -106,7 +106,7 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <span :class="customer.is_member ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                      x-text="customer.is_member ? 'Active' : 'Inactive'"></span>
+                      x-text="customer.is_member ? 'Member' : 'Non-Member'"></span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-4">
                 <a :href="`/customers/${customer.customer_id}`" class="text-blue-600 hover:text-blue-900" title="View">

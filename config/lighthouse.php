@@ -120,7 +120,7 @@ return [
         // 'scalars' => [
         //     'DateTime' => App\GraphQL\Scalars\DateTime::class,
         // ],
-        
+
 
     ],
 
@@ -278,7 +278,7 @@ return [
     'scalars' => [
     'DateTime' => \Nuwave\Lighthouse\Schema\Types\Scalars\DateTime::class,
     'Date' => \Nuwave\Lighthouse\Schema\Types\Scalars\Date::class,
-    //'Time' => \Nuwave\Lighthouse\Schema\Types\Scalars\Time::class,
+    'Time' => \App\GraphQL\Scalars\Time::class,
 ],
 
 

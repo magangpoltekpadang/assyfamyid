@@ -7,8 +7,10 @@ type Shift {
     shift_name: String!
     start_time: DateTime!
     end_time: DateTime!
+    is_active: Boolean
     created_at: DateTime!
     updated_at: DateTime
+    outlet: Outlet @belongsTo
 }
 
 input ShiftInput {

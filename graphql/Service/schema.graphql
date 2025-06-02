@@ -11,6 +11,7 @@ type Service {
     outlet_id: ID
     created_at: DateTime!
     updated_at: DateTime
+    outlet:  Outlet @belongsTo
 }
 
 input ServiceInput {
@@ -41,7 +42,7 @@ input ServiceFilter {
 }
 
 extend type Query {
-    services(search: String): [Service!]!
+    services(search: String, is_active: Boolean): [Service!]!
         @all(model: "App\\Models\\Service\\Service")
 
     service(service_id: ID! @eq): Service

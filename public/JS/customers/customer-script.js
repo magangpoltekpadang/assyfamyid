@@ -54,7 +54,6 @@ function customerData() {
 
         this.customers = result.data.customers || [];
 
-        // Manual filter jika backend belum support filter (optional)
         if (this.isMemberFilter !== '') {
           const isMemberBool = this.isMemberFilter === '1';
           this.customers = this.customers.filter(c => c.is_member === isMemberBool);
@@ -68,13 +67,11 @@ function customerData() {
           );
         }
 
-        // Stats count
         this.pagination.total = this.customers.length;
-        this.pagination.last_page = 1; // kalau backend belum support pagination
+        this.pagination.last_page = 1;
         this.pagination.from = this.customers.length > 0 ? 1 : 0;
         this.pagination.to = this.customers.length;
 
-        // Stats
         this.totalCustomers = this.customers.length;
         this.memberCustomers = this.customers.filter(c => c.is_member).length;
         this.nonMemberCustomers = this.customers.filter(c => !c.is_member).length;

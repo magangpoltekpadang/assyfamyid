@@ -9,7 +9,9 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "mll-lab/graphql-php-scalars": "^6.4",
         "mll-lab/laravel-graphiql": "^4.0",
+        "mll-lab/laravel-graphql-playground": "^1.1",
         "nesbot/carbon": "*",
         "nuwave/lighthouse": "^6.56"
     },

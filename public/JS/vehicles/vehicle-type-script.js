@@ -69,7 +69,6 @@ function vehicleTypeData() {
                     );
                 }
 
-                // Karena kita belum dapat info pagination dari GraphQL, kita hitung manual
                 this.pagination.total = this.vehicleTypes.length;
                 this.pagination.last_page = 1;
                 this.pagination.from = 1;

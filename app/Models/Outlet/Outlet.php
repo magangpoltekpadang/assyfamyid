@@ -16,6 +16,7 @@ class Outlet extends Model
         'outlet_name',
         'address',
         'phone_number',
+        'is_active',
     ];
 
     protected $casts = [

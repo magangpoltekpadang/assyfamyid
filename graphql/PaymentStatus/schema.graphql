@@ -28,7 +28,7 @@ input PaymentStatusFilter {
 }
 
 extend type Query {
-    paymentStatuses(search: String): [PaymentStatus!]!
+    paymentStatuses: [PaymentStatus!]!
         @all(model: "App\\Models\\PaymentStatus\\PaymentStatus")
 
     paymentStatus(payment_status_id: ID! @eq): PaymentStatus

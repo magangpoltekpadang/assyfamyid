@@ -7,7 +7,6 @@
     <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold text-gray-800">Vehicle Types</h1>
         <a href="/vehicle-types/create"
-           {{-- @click.prevent="alert('Create functionality would go here')" --}}
            class="px-2 py-0.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center">
             <i class="fas fa-plus mr-2"></i> Add New Type
         </a>

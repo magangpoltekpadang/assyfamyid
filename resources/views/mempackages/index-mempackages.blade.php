@@ -103,7 +103,7 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" x-text="package.package_id"></td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="package.package_name"></td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="package.duration_days"></td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="`$${package.price}`"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="`${package.price}`"></td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="package.max_vehicles"></td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span :class="package.is_active == 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
@@ -111,6 +111,9 @@
                       x-text="package.is_active == 1 ? 'Active' : 'Inactive'"></span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-4">
+                <a :href="`/membership-packages/${package.package_id}`" class="text-blue-600 hover:text-blue-900" title="View">
+                  <i class="fas fa-info-circle"></i>
+                </a>
                 <a :href="`/membership-packages/${package.package_id}/edit`" class="text-yellow-500 hover:text-yellow-700" title="Edit">
                   <i class="fas fa-edit"></i>
                 </a>
