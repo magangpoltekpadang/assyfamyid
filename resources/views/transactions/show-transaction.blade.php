@@ -4,15 +4,15 @@
 <div class="max-w-4xl mx-auto mt-12 bg-white rounded-2xl shadow-md p-8">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
-            <i class="fas fa-user-circle text-blue-600 text-4xl"></i>
-            Customer Details
+            <i class="fas fa-receipt text-blue-600 text-4xl"></i>
+            Transaction Details
         </h1>
         <div class="flex gap-3">
-            <a href="{{ url('customers') }}"
+            <a href="{{ route('transactions.index') }}"
                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
-            <a href="{{ url('customers/' . $customer->customer_id . '/edit') }}"
+            <a href="{{ route('transactions.edit', $transaction->transaction_id) }}"
                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition">
                 <i class="fas fa-edit"></i> Edit
             </a>
@@ -20,91 +20,115 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {{-- Name --}}
+
+        {{-- Transaction Code --}}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase">Name</h3>
-            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $customer->name ?? '-' }}</p>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Transaction Code</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $transaction->transaction_code ?? '-' }}</p>
         </div>
 
-        {{-- Plate Number --}}
+        {{-- Transaction Date --}}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase">Plate Number</h3>
-            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $customer->plate_number ?? '-' }}</p>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Transaction Date</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $transaction->transaction_date ? $transaction->transaction_date->format('d M Y, H:i') : '-' }}</p>
         </div>
 
-        {{-- Phone Number --}}
+        {{-- Customer --}}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase">Phone Number</h3>
-            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $customer->phone_number ?? '-' }}</p>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Customer</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $transaction->customer?->name ?? '-' }}</p>
         </div>
 
-        {{-- Vehicle Type --}}
+        {{-- Outlet --}}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase">Vehicle Type</h3>
-            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $customer->vehicleType->type_name ?? '-' }}</p>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Outlet</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $transaction->outlet?->outlet_name ?? '-' }}</p>
         </div>
 
-        {{-- Vehicle Color --}}
+        {{-- Staff --}}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase">Vehicle Color</h3>
-            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $customer->vehicle_color ?? '-' }}</p>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Staff</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $transaction->staff?->name ?? '-' }}</p>
         </div>
 
-        {{-- Member Number --}}
+        {{-- Shift --}}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase">Member Number</h3>
-            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $customer->member_number ?? '-' }}</p>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Shift</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $transaction->shift?->shift_name ?? '-' }}</p>
         </div>
 
-        {{-- Join Date --}}
-        <div class="bg-gray-50 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full">
-            <div>
-                <h3 class="text-sm font-semibold text-gray-500 uppercase">Join Date</h3>
-                <p class="mt-1 text-gray-800">
-                    {{ $customer->join_date ? $customer->join_date->format('d M Y') : '-' }}
-                </p>
-            </div>
+        {{-- Subtotal --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Subtotal</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ 'Rp ' . number_format($transaction->subtotal ?? 0, 0, ',', '.') }}</p>
         </div>
 
-        {{-- Member Expiry Date --}}
-        <div class="bg-gray-50 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full">
-            <div>
-                <h3 class="text-sm font-semibold text-gray-500 uppercase">Member Expiry Date</h3>
-                <p class="mt-1 text-gray-800">
-                    {{ $customer->member_expiry_date ? $customer->member_expiry_date->format('d M Y') : '-' }}
-                </p>
-            </div>
+        {{-- Discount --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Discount</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ 'Rp ' . number_format($transaction->discount ?? 0, 0, ',', '.') }}</p>
         </div>
 
-         {{-- Created At --}}
-        <div class="bg-gray-50 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full">
-            <div>
-                <h3 class="text-sm font-semibold text-gray-500 uppercase">Created At</h3>
-                <p class="mt-1 text-gray-800">
-                    {{ $customer->created_at ? $customer->created_at->format('d M Y, H:i') : '-' }}
-                </p>
-            </div>
+        {{-- Tax --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Tax</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ 'Rp ' . number_format($transaction->tax ?? 0, 0, ',', '.') }}</p>
+        </div>
+
+        {{-- Final Price --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Final Price</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ 'Rp ' . number_format($transaction->final_price ?? 0, 0, ',', '.') }}</p>
+        </div>
+
+        {{-- Payment Status --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Payment Status</h3>
+            <p class="mt-1 text-lg text-gray-900 font-semibold">{{ $transaction->paymentStatus?->status_name ?? '-' }}</p>
+        </div>
+
+        {{-- Gate Opened --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Gate Opened</h3>
+            <p class="mt-1 text-lg font-semibold {{ $transaction->gate_opened ? 'text-green-600' : 'text-red-600' }}">
+                {{ $transaction->gate_opened ? 'Yes' : 'No' }}
+            </p>
+        </div>
+
+        {{-- Notes --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm col-span-1 sm:col-span-2">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Notes</h3>
+            <p class="mt-1 text-gray-800 whitespace-pre-wrap">{{ $transaction->notes ?? '-' }}</p>
+        </div>
+
+        {{-- Receipt Printed --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Receipt Printed</h3>
+            <p class="mt-1 text-lg font-semibold {{ $transaction->receipt_printed ? 'text-green-600' : 'text-red-600' }}">
+                {{ $transaction->receipt_printed ? 'Yes' : 'No' }}
+            </p>
+        </div>
+
+        {{-- WhatsApp Sent --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">WhatsApp Sent</h3>
+            <p class="mt-1 text-lg font-semibold {{ $transaction->whatsapp_sent ? 'text-green-600' : 'text-red-600' }}">
+                {{ $transaction->whatsapp_sent ? 'Yes' : 'No' }}
+            </p>
+        </div>
+
+        {{-- Created At --}}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Created At</h3>
+            <p class="mt-1 text-gray-800">{{ $transaction->created_at ? $transaction->created_at->format('d M Y, H:i') : '-' }}</p>
         </div>
 
         {{-- Updated At --}}
-        <div class="bg-gray-50 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full">
-            <div>
-                <h3 class="text-sm font-semibold text-gray-500 uppercase">Updated At</h3>
-                <p class="mt-1 text-gray-800">
-                    {{ $customer->updated_at ? $customer->updated_at->format('d M Y, H:i') : '-' }}
-                </p>
-            </div>
-        </div>
-
-
-        {{-- Membership Status --}}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase">Membership Status</h3>
-            <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full font-semibold
-                {{ $customer->is_member ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                {{ $customer->is_member ? 'Member' : 'Non-Member' }}
-            </span>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase">Updated At</h3>
+            <p class="mt-1 text-gray-800">{{ $transaction->updated_at ? $transaction->updated_at->format('d M Y, H:i') : '-' }}</p>
         </div>
+
     </div>
 </div>
 @endsection

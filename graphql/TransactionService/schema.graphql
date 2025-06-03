@@ -6,13 +6,17 @@ type TransactionService {
     unit_price: Float
     discount: Float
     total_price: Float
-    worker_id: ID
+    staff_id: ID
     start_time: DateTime
     end_time: DateTime
     status: String
     notes: String
     created_at: DateTime!
     updated_at: DateTime
+
+    service: Service @belongsTo
+    transaction: Transaction @belongsTo
+    staff: Staff @belongsTo
 }
 
 input TransactionServiceInput {
@@ -21,8 +25,8 @@ input TransactionServiceInput {
     quantity: Int!
     unit_price: Float
     discount: Float
-    total_price: Float
-    worker_id: ID
+    # total_price: Float
+    staff_id: ID
     start_time: DateTime
     end_time: DateTime
     status: String
@@ -35,8 +39,8 @@ input TransactionServiceUpdateInput {
     quantity: Int
     unit_price: Float
     discount: Float
-    total_price: Float
-    worker_id: ID
+    # total_price: Float
+    staff_id: ID
     start_time: DateTime
     end_time: DateTime
     status: String

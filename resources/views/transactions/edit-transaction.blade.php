@@ -2,95 +2,160 @@
 
 @section('content')
 <div class="max-w-xl mx-auto mt-10 p-6 bg-white shadow-md rounded-2xl">
-    <h2 class="text-3xl font-bold mb-6 text-gray-800">Edit Customer</h2>
+    <h2 class="text-3xl font-bold mb-6 text-gray-800">Edit Transaction</h2>
 
-    <form method="POST" action="{{ url('customers/' . $customer->customer_id) }}">
+    <form method="POST" action="{{ url('transactions/' . $transaction->transaction_id) }}">
         @csrf
         @method('PUT')
 
-        {{-- Plate Number --}}
+        {{-- Transaction Code --}}
         <div class="mb-4">
-            <label for="plate_number" class="block text-sm font-medium text-gray-700">Plate Number</label>
-            <input type="text" id="plate_number" name="plate_number"
-                value="{{ old('plate_number', $customer->plate_number) }}"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2"
-                maxlength="15">
+            <label for="transaction_code" class="block text-sm font-medium text-gray-700">Transaction Code</label>
+            <input type="text" id="transaction_code" name="transaction_code" required
+                value="{{ old('transaction_code', $transaction->transaction_code) }}"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
         </div>
 
-        {{-- Name --}}
+        {{-- Customer --}}
         <div class="mb-4">
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-            <input type="text" id="name" name="name"
-                value="{{ old('name', $customer->name) }}"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2"
-                maxlength="100" required>
-        </div>
-
-        {{-- Phone Number --}}
-        <div class="mb-4">
-            <label for="phone_number" class="block text-sm font-medium text-gray-700">Phone Number</label>
-            <input type="text" id="phone_number" name="phone_number"
-                value="{{ old('phone_number', $customer->phone_number) }}"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2"
-                maxlength="20">
-        </div>
-
-        {{-- Vehicle Type --}}
-        <div class="mb-4">
-            <label for="vehicle_type_id" class="block text-sm font-medium text-gray-700">Vehicle Type</label>
-            <select id="vehicle_type_id" name="vehicle_type_id"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2">
-                <option value="">-- Select Vehicle Type --</option>
-                @foreach ($vehicleTypes as $type)
-                    <option value="{{ $type->vehicle_type_id }}" {{ $customer->vehicle_type_id == $type->vehicle_type_id ? 'selected' : '' }}>
-                        {{ $type->type_name }}
+            <label for="customer_id" class="block text-sm font-medium text-gray-700">Customer</label>
+            <select id="customer_id" name="customer_id" required
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="">-- Select Customer --</option>
+                @foreach ($customers as $customer)
+                    <option value="{{ $customer->customer_id }}" {{ $transaction->customer_id == $customer->customer_id ? 'selected' : '' }}>
+                        {{ $customer->name }}
                     </option>
                 @endforeach
             </select>
         </div>
 
-        {{-- Vehicle Color --}}
+        {{-- Outlet --}}
         <div class="mb-4">
-            <label for="vehicle_color" class="block text-sm font-medium text-gray-700">Vehicle Color</label>
-            <input type="text" id="vehicle_color" name="vehicle_color"
-                value="{{ old('vehicle_color', $customer->vehicle_color) }}"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2"
-                maxlength="30">
-        </div>
-
-        {{-- Member Number --}}
-        <div class="mb-4">
-            <label for="member_number" class="block text-sm font-medium text-gray-700">Member Number</label>
-            <input type="text" id="member_number" name="member_number"
-                value="{{ old('member_number', $customer->member_number) }}"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2"
-                maxlength="20">
-        </div>
-
-        {{-- Join Date --}}
-        <div class="mb-4">
-            <label for="join_date" class="block text-sm font-medium text-gray-700">Join Date</label>
-            <input type="date" id="join_date" name="join_date"
-                value="{{ old('join_date', $customer->join_date) }}"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2">
-        </div>
-
-        {{-- Member Expiry Date --}}
-        <div class="mb-4">
-            <label for="member_expiry_date" class="block text-sm font-medium text-gray-700">Member Expiry Date</label>
-            <input type="datetime-local" id="member_expiry_date" name="member_expiry_date"
-                value="{{ old('member_expiry_date', $customer->member_expiry_date ? \Carbon\Carbon::parse($customer->member_expiry_date)->format('Y-m-d\TH:i') : '') }}"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2">
-        </div>
-
-        {{-- Is Member --}}
-        <div class="mb-6">
-            <label for="is_member" class="block text-sm font-medium text-gray-700">Is Member?</label>
-            <select id="is_member" name="is_member"
-                class="mt-1 block w-full rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm p-2">
-                <option value="1" {{ $customer->is_member ? 'selected' : '' }}>Yes</option>
-                <option value="0" {{ !$customer->is_member ? 'selected' : '' }}>No</option>
+            <label for="outlet_id" class="block text-sm font-medium text-gray-700">Outlet</label>
+            <select id="outlet_id" name="outlet_id" required
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="">-- Select Outlet --</option>
+                @foreach ($outlets as $outlet)
+                    <option value="{{ $outlet->outlet_id }}" {{ $transaction->outlet_id == $outlet->outlet_id ? 'selected' : '' }}>
+                        {{ $outlet->outlet_name }}
+                    </option>
+                @endforeach
             </select>
+        </div>
+
+        {{-- Transaction Date --}}
+        <div class="mb-4">
+            <label for="transaction_date" class="block text-sm font-medium text-gray-700">Transaction Date</label>
+            <input type="datetime-local" id="transaction_date" name="transaction_date" required
+                value="{{ old('transaction_date', \Carbon\Carbon::parse($transaction->transaction_date)->format('Y-m-d\TH:i')) }}"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+        </div>
+
+        {{-- Subtotal --}}
+        <div class="mb-4">
+            <label for="subtotal" class="block text-sm font-medium text-gray-700">Subtotal</label>
+            <input type="number" step="0.01" id="subtotal" name="subtotal" required
+                value="{{ old('subtotal', $transaction->subtotal) }}"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+        </div>
+
+        {{-- Discount --}}
+        <div class="mb-4">
+            <label for="discount" class="block text-sm font-medium text-gray-700">Discount</label>
+            <input type="number" step="0.01" id="discount" name="discount"
+                value="{{ old('discount', $transaction->discount) }}"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+        </div>
+
+        {{-- Tax --}}
+        <div class="mb-4">
+            <label for="tax" class="block text-sm font-medium text-gray-700">Tax</label>
+            <input type="number" step="0.01" id="tax" name="tax"
+                value="{{ old('tax', $transaction->tax) }}"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+        </div>
+
+        {{-- Final Price --}}
+        <div class="mb-4">
+            <label for="final_price" class="block text-sm font-medium text-gray-700">Final Price</label>
+            <input type="number" step="0.01" id="final_price" name="final_price" readonly
+                class="mt-1 block w-full rounded-md border border-gray-300 bg-gray-100 p-2 shadow-sm cursor-not-allowed"
+                value="{{ old('final_price', $transaction->final_price) }}">
+        </div>
+
+        {{-- Payment Status --}}
+        <div class="mb-4">
+            <label for="payment_status_id" class="block text-sm font-medium text-gray-700">Payment Status</label>
+            <select id="payment_status_id" name="payment_status_id" required
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="">-- Select Status --</option>
+                @foreach ($paymentStatuses as $status)
+                    <option value="{{ $status->payment_status_id }}" {{ $transaction->payment_status_id == $status->payment_status_id ? 'selected' : '' }}>
+                        {{ $status->status_name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Gate Opened --}}
+        <div class="mb-4">
+            <label for="gate_opened" class="block text-sm font-medium text-gray-700">Gate Opened</label>
+            <select id="gate_opened" name="gate_opened" class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="1" {{ $transaction->gate_opened ? 'selected' : '' }}>Yes</option>
+                <option value="0" {{ !$transaction->gate_opened ? 'selected' : '' }}>No</option>
+            </select>
+        </div>
+
+        {{-- Staff --}}
+        <div class="mb-4">
+            <label for="staff_id" class="block text-sm font-medium text-gray-700">Staff</label>
+            <select id="staff_id" name="staff_id" class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="">-- Select Staff --</option>
+                @foreach ($staffs as $staff)
+                    <option value="{{ $staff->staff_id }}" {{ $transaction->staff_id == $staff->staff_id ? 'selected' : '' }}>
+                        {{ $staff->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Shift --}}
+        <div class="mb-4">
+            <label for="shift_id" class="block text-sm font-medium text-gray-700">Shift</label>
+            <select id="shift_id" name="shift_id" class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="">-- Select Shift --</option>
+                @foreach ($shifts as $shift)
+                    <option value="{{ $shift->shift_id }}" {{ $transaction->shift_id == $shift->shift_id ? 'selected' : '' }}>
+                        {{ $shift->shift_name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Receipt Printed --}}
+        <div class="mb-4">
+            <label for="receipt_printed" class="block text-sm font-medium text-gray-700">Receipt Printed</label>
+            <select id="receipt_printed" name="receipt_printed" class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="1" {{ $transaction->receipt_printed ? 'selected' : '' }}>Yes</option>
+                <option value="0" {{ !$transaction->receipt_printed ? 'selected' : '' }}>No</option>
+            </select>
+        </div>
+
+        {{-- WhatsApp Sent --}}
+        <div class="mb-4">
+            <label for="whatsapp_sent" class="block text-sm font-medium text-gray-700">WhatsApp Sent</label>
+            <select id="whatsapp_sent" name="whatsapp_sent" class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">
+                <option value="1" {{ $transaction->whatsapp_sent ? 'selected' : '' }}>Yes</option>
+                <option value="0" {{ !$transaction->whatsapp_sent ? 'selected' : '' }}>No</option>
+            </select>
+        </div>
+
+        {{-- Notes --}}
+        <div class="mb-6">
+            <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
+            <textarea id="notes" name="notes" rows="3"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm">{{ old('notes', $transaction->notes) }}</textarea>
         </div>
 
         {{-- Submit --}}

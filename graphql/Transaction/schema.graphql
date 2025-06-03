@@ -19,8 +19,13 @@ type Transaction {
     notes: String
     created_at: DateTime!
     updated_at: DateTime!
-    payment_status: PaymentStatus @belongsTo
+    paymentStatus: PaymentStatus @belongsTo
     customer: Customer @belongsTo
+}
+
+type TransactionPaginator {
+  data: [Transaction!]!
+  paginatorInfo: PaginatorInfo!
 }
 
 input TransactionInput {
@@ -60,9 +65,10 @@ input TransactionUpdateInput {
 }
 
 extend type Query {
-    transactions: [Transaction!]! @all(model: "App\\Models\\Transaction\\Transaction")
-    transaction(transaction_id: ID! @eq): Transaction
-        @find(model: "App\\Models\\Transaction\\Transaction")
+  transactions(
+    search: String @where(operator: "like", key: "transaction_code")
+    payment_status_id: ID @where
+  ): [Transaction!]! @all(model: "App\\Models\\Transaction\\Transaction")
 }
 
 extend type Mutation {

@@ -1,24 +1,21 @@
 function transactionData() {
   return {
     transactions: [],
-    pagination: {
-      current_page: 1,
-      last_page: 1,
-      per_page: 10,
-      total: 0,
-      from: 0,
-      to: 0,
-    },
     search: '',
-    payment_status_id: '',  // tambahkan ini karena ada filter payment_status
+    payment_status_id: '',
 
-    // Statistik jumlah transaksi
     totalTransactions: 0,
     paidTransactions: 0,
     unpaidTransactions: 0,
 
     showDeleteModal: false,
     transactionIdToDelete: null,
+
+    // Tambahkan properti subtotal, discount, tax, final_price agar calculateFinalPrice jalan
+    subtotal: 0,
+    discount: 0,
+    tax: 0,
+    final_price: 0,
 
     init() {
       this.fetchTransactions();
@@ -27,41 +24,27 @@ function transactionData() {
     async fetchTransactions() {
       try {
         const query = `
-          query($search: String, $payment_status_id: ID, $page: Int) {
-            transactions(search: $search, payment_status_id: $payment_status_id, page: $page) {
-              data {
-                transaction_id
-                transaction_code
-                transaction_date
-                final_price
-                customer {
-                  name
-                }
-                outlet {
-                  outlet_name
-                }
-                payment_status {
-                  status_name
-                  payment_status_id
-                }
+          query($search: String, $payment_status_id: ID) {
+            transactions(search: $search, payment_status_id: $payment_status_id) {
+              transaction_id
+              transaction_code
+              transaction_date
+              final_price
+              customer {
+                name
               }
-              pagination {
-                total
-                current_page
-                last_page
-                per_page
-                from
-                to
+              outlet_id
+              paymentStatus {
+                status_name
+                payment_status_id
               }
             }
           }
         `;
 
-        const variables = {
-          search: this.search || null,
-          payment_status_id: this.payment_status_id || null,
-          page: this.pagination.current_page,
-        };
+        const variables = {};
+        if (this.search.trim() !== '') variables.search = this.search;
+        if (this.payment_status_id !== '') variables.payment_status_id = this.payment_status_id;
 
         const response = await fetch('/graphql', {
           method: 'POST',
@@ -77,28 +60,15 @@ function transactionData() {
           return;
         }
 
-        const transactionsData = result.data.transactions;
+        this.transactions = result.data.transactions || [];
 
-        this.transactions = transactionsData.data || [];
-
-        this.pagination = transactionsData.pagination || {
-          total: 0,
-          current_page: 1,
-          last_page: 1,
-          per_page: 10,
-          from: 0,
-          to: 0,
-        };
-
-        this.totalTransactions = this.pagination.total || this.transactions.length;
-
-        // Pastikan asumsi payment_status_id: 1=Paid, 2=Unpaid (sesuaikan dengan data sebenarnya)
+        // Update statistik
+        this.totalTransactions = this.transactions.length;
         this.paidTransactions = this.transactions.filter(
-          t => t.payment_status?.payment_status_id === 1
+          t => t.paymentStatus?.payment_status_id == 1
         ).length;
-
         this.unpaidTransactions = this.transactions.filter(
-          t => t.payment_status?.payment_status_id === 2
+          t => t.paymentStatus?.payment_status_id == 2
         ).length;
 
       } catch (error) {
@@ -107,10 +77,23 @@ function transactionData() {
       }
     },
 
+    calculateFinalPrice() {
+      const sub = parseFloat(this.subtotal);
+      const disc = parseFloat(this.discount);
+      const t = parseFloat(this.tax);
+
+      const subtotalVal = isNaN(sub) ? 0 : sub;
+      const discountVal = isNaN(disc) ? 0 : disc;
+      const taxVal = isNaN(t) ? 0 : t;
+
+      this.final_price = subtotalVal - discountVal + taxVal;
+
+      if (this.final_price < 0) this.final_price = 0;
+    },
+
     async resetFilters() {
       this.search = '';
       this.payment_status_id = '';
-      this.pagination.current_page = 1;
       await this.fetchTransactions();
     },
 

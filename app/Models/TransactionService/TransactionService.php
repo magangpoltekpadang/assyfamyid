@@ -16,10 +16,10 @@ class TransactionService extends Model
         'transaction_id',
         'service_id',
         'quantity',
-        'unit_price', 
+        'unit_price',
         'discount',
         'total_price',
-        'worker_id',
+        'staff_id',
         'start_time',
         'end_time',
         'status',
@@ -35,11 +35,16 @@ class TransactionService extends Model
 
     public function service()
     {
-        return $this->belongsTo(\App\Models\Service\Service::class);
+        return $this->belongsTo(\App\Models\Service\Service::class, 'service_id');
+    }
+
+    public function staff()
+    {
+        return $this->belongsTo(\App\Models\Staff\Staff::class, 'staff_id');
     }
 
     public function transaction()
     {
-        return $this->belongsTo(\App\Models\Transaction\Transaction::class);
+        return $this->belongsTo(\App\Models\Transaction\Transaction::class, 'transaction_id');
     }
 }

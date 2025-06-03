@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-<div x-data="transactionData()" x-init="fetchTransactions()" class="space-y-6 p-6">
+<div x-data="transactionData()" x-init="init()" class="space-y-6 p-6">
 
   <!-- Header and Add Button -->
   <div class="flex items-center justify-between">
@@ -98,42 +98,50 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
+          <template x-if="transactions.length === 0">
+            <tr>
+              <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No Transactions Found</td>
+            </tr>
+          </template>
           <template x-for="transaction in transactions" :key="transaction.transaction_id">
             <tr>
               <td class="px-6 py-4 text-sm text-gray-900" x-text="transaction.transaction_id"></td>
               <td class="px-6 py-4 text-sm text-blue-600 font-semibold" x-text="transaction.transaction_code"></td>
-              <td class="px-6 py-4 text-sm text-gray-700" x-text="transaction.customer.name"></td>
-              <td class="px-6 py-4 text-sm text-gray-700" x-text="transaction.transaction_date"></td>
+              <td class="px-6 py-4 text-sm text-gray-700" x-text="transaction.customer ? transaction.customer.name : '-'"></td>
+              <td class="px-6 py-4 text-sm text-gray-700" x-text="new Date(transaction.transaction_date).toLocaleDateString()"></td>
               <td class="px-6 py-4 text-sm text-gray-700" x-text="`Rp ${parseInt(transaction.final_price).toLocaleString()}`"></td>
               <td class="px-6 py-4 text-sm">
-                <span :class="transaction.payment_status_id === 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
-                      class="px-2 inline-flex text-xs font-semibold leading-5 rounded-full"
-                      x-text="transaction.payment_status.name">
+                <span
+                  :class="transaction.paymentStatus?.payment_status_id == 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                  class="px-2 inline-flex text-xs font-semibold leading-5 rounded-full"
+                  x-text="transaction.paymentStatus ? transaction.paymentStatus.status_name : 'Unknown'">
                 </span>
               </td>
               <td class="px-6 py-4 text-sm flex space-x-4">
                 <a :href="`/transactions/${transaction.transaction_id}`" class="text-blue-600 hover:text-blue-900" title="View">
-                    <i class="fas fa-info-circle"></i>
+                  <i class="fas fa-info-circle"></i>
                 </a>
                 <a :href="`/transactions/${transaction.transaction_id}/edit`" class="text-yellow-500 hover:text-yellow-700" title="Edit">
-                    <i class="fas fa-edit"></i>
+                  <i class="fas fa-edit"></i>
                 </a>
                 <button @click="confirmDelete(transaction.transaction_id)" class="text-red-600 hover:text-red-900" title="Delete" type="button">
-                    <i class="fas fa-trash"></i>
+                  <i class="fas fa-trash"></i>
                 </button>
               </td>
             </tr>
           </template>
-          <tr x-show="transactions.length === 0">
-            <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No Transactions Found</td>
-          </tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <!-- Delete Confirmation Modal -->
-  <div x-show="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50" style="display: none;">
+  <div
+    x-show="showDeleteModal"
+    x-transition
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
+    style="display: none;"
+  >
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
       <h2 class="text-lg font-semibold text-gray-800 mb-4">Confirm Delete</h2>
       <p class="text-gray-600 mb-6">Are you sure you want to delete this transaction?</p>
@@ -143,6 +151,7 @@
       </div>
     </div>
   </div>
+
 </div>
 
 @push('scripts')

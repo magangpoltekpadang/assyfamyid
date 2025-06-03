@@ -78,8 +78,12 @@
                 <i class="fas fa-users mr-2"></i> Staff
             </a>
 
-            <a href="/transaction" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+            <a href="/transactions" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
                 <i class="fas fa-receipt mr-2"></i> Transaction
+            </a>
+
+            <a href="/transaction-services" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">
+                <i class="fas fa-receipt mr-2"></i> Transaction Service
             </a>
 
             <a href="/vehicle-types" class="block px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 flex items-center">

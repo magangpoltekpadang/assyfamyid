@@ -13,6 +13,7 @@ use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionServiceController;
 use App\Http\Controllers\VehicleTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ Route::resource('services', ServiceController::class);
 Route::resource('service-types', ServiceTypeController::class);
 Route::resource('shift', ShiftController::class);
 Route::resource('staff', StaffController::class);
-Route::resource('transaction', TransactionController::class);
+Route::resource('transactions', TransactionController::class);
+Route::resource('transaction-services', TransactionServiceController::class);
 Route::resource('vehicle-types', VehicleTypeController::class);
 

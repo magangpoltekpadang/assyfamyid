@@ -9,19 +9,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                 },
-                body: JSON.stringify({
-                    query: query,
-                    variables: variables,
-                }),
+                body: JSON.stringify({ query, variables }),
             });
             return await response.json();
         } catch (error) {
-            console.error('GraphQL Error:', error);
+            console.error("GraphQL Error:", error);
             return { errors: [error] };
         }
     }
 
-    Alpine.data('transactionData', () => ({
+    window.transactionData = () => ({
         transactions: [],
         loading: false,
         error: null,
@@ -34,6 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
             has_more: false
         },
 
+        subtotal: 0,
+        discount: 0,
+        tax: 0,
+        final_price: 0,
+
         async init() {
             await this.fetchTransactions();
         },
@@ -43,27 +45,26 @@ document.addEventListener("DOMContentLoaded", function () {
             this.error = null;
 
             const query = `
-                query GetTransactions($search: String) {
-                    transactions(search: $search) {
+                query($search: String, $payment_status_id: ID) {
+                    transactions(search: $search, payment_status_id: $payment_status_id) {
                         transaction_id
                         transaction_code
                         transaction_date
                         final_price
-                        customer {
-                            name
-                        }
-                        outlet {
-                            outlet_name
-                        }
-                        payment_status {
+                        customer { name }
+                        outlet_id
+                        paymentStatus {
                             status_name
+                            payment_status_id
                         }
                     }
                 }
             `;
 
             const variables = {};
-            if (this.search.trim() !== '') variables.search = this.search;
+            if (this.search.trim() !== '') {
+                variables.search = this.search;
+            }
 
             const result = await executeQuery(query, variables);
 
@@ -72,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error('GraphQL Error:', result.errors);
             } else {
                 this.transactions = result.data.transactions;
-                // Jika backend sudah support pagination, isi properti pagination di sini
             }
 
             this.loading = false;
@@ -103,9 +103,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.transactions = this.transactions.filter(t => t.transaction_id !== transaction_id);
                 return true;
             }
+        },
+
+        calculateFinalPrice() {
+            const sub = parseFloat(this.subtotal);
+            const disc = parseFloat(this.discount);
+            const t = parseFloat(this.tax);
+
+            const subtotalVal = isNaN(sub) ? 0 : sub;
+            const discountVal = isNaN(disc) ? 0 : disc;
+            const taxVal = isNaN(t) ? 0 : t;
+
+            this.final_price = subtotalVal - discountVal + taxVal;
+            if (this.final_price < 0) this.final_price = 0;
         }
-    }));
+    });
 
     Alpine.start();
 });
-

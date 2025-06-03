@@ -40,7 +40,7 @@ class TransactionController extends Controller
             'subtotal' => 'nullable|numeric',
             'discount' => 'nullable|numeric',
             'tax' => 'nullable|numeric',
-            'final_price' => 'nullable|numeric',
+            //'final_price' => 'nullable|numeric',
             'payment_status_id' => 'nullable|exists:payment_statuses,payment_status_id',
             'gate_opened' => 'nullable|boolean',
             'staff_id' => 'nullable|exists:staff,staff_id',
@@ -52,7 +52,7 @@ class TransactionController extends Controller
 
         Transaction::create($validated);
 
-        return redirect()->route('transaction.index')->with('success', 'Transaction created.');
+        return redirect()->route('transactions.index')->with('success', 'Transaction created.');
     }
 
     public function show($id)
@@ -97,7 +97,7 @@ class TransactionController extends Controller
 
         $transaction->update($validated);
 
-        return redirect()->route('transaction.index')->with('success', 'Transaction updated.');
+        return redirect()->route('transactions.index')->with('success', 'Transaction updated.');
     }
 
     public function destroy($id)
@@ -105,6 +105,6 @@ class TransactionController extends Controller
         $transaction = Transaction::findOrFail($id);
         $transaction->delete();
 
-        return redirect()->route('transaction.index')->with('success', 'Transaction deleted.');
+        return redirect()->route('transactions.index')->with('success', 'Transaction deleted.');
     }
 }
